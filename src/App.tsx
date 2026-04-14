@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { BarChart3, Users, PhoneCall, Calendar, UserPlus, LogOut } from 'lucide-react';
+import { BarChart3, Users, PhoneCall, Calendar, UserPlus, LogOut, Settings } from 'lucide-react';
 import AIQAEngine from './components/AIQAEngine';
 import SalesCRM from './components/SalesCRM';
 import OperationsDashboard from './components/OperationsDashboard';
 import SetterDashboard from './components/SetterDashboard';
 import NadiaDashboard from './components/NadiaDashboard';
 import RecruiterDashboard from './components/RecruiterDashboard';
+import SettingsDashboard from './components/SettingsDashboard';
 
 type Role = 'manager' | 'setter' | 'nadia' | 'recruiter';
 
@@ -141,16 +142,19 @@ export default function App() {
 
         <div className="p-4 border-t border-white/10">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className={`w-9 h-9 rounded-full ${userInfo.color} flex items-center justify-center font-bold text-sm`}>
+            <button 
+              onClick={() => setCurrentView('settings')}
+              className="flex items-center gap-3 flex-1 hover:bg-white/5 p-2 -ml-2 rounded-lg transition-colors text-left"
+            >
+              <div className={`w-9 h-9 rounded-full ${userInfo.color} flex items-center justify-center font-bold text-sm shrink-0`}>
                 {userInfo.initials}
               </div>
-              <div className="text-left">
-                <div className="text-sm font-medium">{userInfo.name}</div>
-                <div className="text-xs text-gray-400">{userInfo.title}</div>
+              <div className="text-left overflow-hidden">
+                <div className="text-sm font-medium truncate">{userInfo.name}</div>
+                <div className="text-xs text-gray-400 truncate">{userInfo.title}</div>
               </div>
-            </div>
-            <button className="text-gray-400 hover:text-white transition-colors">
+            </button>
+            <button className="text-gray-400 hover:text-white transition-colors p-2">
               <LogOut size={16} />
             </button>
           </div>
@@ -158,30 +162,36 @@ export default function App() {
       </aside>
 
       {/* Main Content Area */}
-      {currentRole === 'manager' && (
+      {currentView === 'settings' ? (
+        <SettingsDashboard role={currentRole} userInfo={userInfo} />
+      ) : (
         <>
-          {currentView === 'qa' && <AIQAEngine />}
-          {currentView === 'crm' && <SalesCRM />}
-          {currentView === 'ops' && <OperationsDashboard />}
-        </>
-      )}
+          {currentRole === 'manager' && (
+            <>
+              {currentView === 'qa' && <AIQAEngine />}
+              {currentView === 'crm' && <SalesCRM />}
+              {currentView === 'ops' && <OperationsDashboard />}
+            </>
+          )}
 
-      {currentRole === 'setter' && (
-        <>
-          {currentView === 'dashboard' && <SetterDashboard />}
-          {currentView === 'qa' && <AIQAEngine />}
-        </>
-      )}
+          {currentRole === 'setter' && (
+            <>
+              {currentView === 'dashboard' && <SetterDashboard />}
+              {currentView === 'qa' && <AIQAEngine />}
+            </>
+          )}
 
-      {currentRole === 'nadia' && (
-        <>
-          {currentView === 'calendar' && <NadiaDashboard />}
-        </>
-      )}
+          {currentRole === 'nadia' && (
+            <>
+              {currentView === 'calendar' && <NadiaDashboard />}
+            </>
+          )}
 
-      {currentRole === 'recruiter' && (
-        <>
-          {currentView === 'pipeline' && <RecruiterDashboard />}
+          {currentRole === 'recruiter' && (
+            <>
+              {currentView === 'pipeline' && <RecruiterDashboard />}
+            </>
+          )}
         </>
       )}
 
